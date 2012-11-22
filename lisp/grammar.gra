@@ -1,0 +1,392 @@
+
+; Grammar Rules
+
+(<start> <==> (<q> <qm>)
+	((x0 = x1)))
+
+(<q> <==> (<wh> <b> <lnp>)
+	(((x0 field) = (x1 root))
+	 ((x0 filter) = x3)))
+
+(<q> <==> (<b> <lnp>)
+	(((x0 field) = exist)
+	 ((x0 filter) = x2)))
+
+(<q> <==> (<b> <lnp> <lnp>)
+	(((x0 field) = exist)
+	 ((x0 filter) = x2)
+	 ((x0 filter) = x3)))
+
+(<q> <==> (<wh> <b> <person> <presenting>)
+	(((x0 field) = (x1 root))
+	 ((x0 filter) = x3)
+	 ((x0 filter pos) = *REMOVE*)
+	 ((x0 filter root) = *REMOVE*)))
+
+(<q> <==> (<qexist> <lnp>)
+	(((x0 field) = exist)
+	 ((x0 filter) = x2)))
+
+(<q> <==> (<what> <b> <det> <field> <of> <lnp>)
+	(((x0 field) = (x4 root))
+	 ((x0 filter) = x6)))
+
+(<q> <==> (<what> <field> <b> <lnp> <in>)
+	(((x0 field) = (x2 root))
+	 ((x0 filter) = x4)))
+
+(<q> <==> (<what> <b> <det> <pfield> <of> <person>)
+	(((x0 field) = (x4 root))
+	 ((x0 filter) = x6)
+	 ((x0 filter pos) = *REMOVE*)
+	 ((x0 filter root) = *REMOVE*)))
+
+(<q> <==> (<what> <b> <fullname> <poss> <pfield>)
+	(((x0 field) = (x5 root))
+	 ((x0 filter) = x3)))
+
+(<q> <==> (<who> <b> <det> <speakers> <for> <lnp>)
+	(((x0 field) = (x1 root))
+	 ((x0 filter) = x6)))
+
+(<q> <==> (<who> <b> <presenting> <lnp>)
+	(((x0 field) = (x1 root))
+	 ((x0 filter) = x4)))
+
+(<q> <==> (<b> <ppt>)
+	(((x0 field) = exist)
+	 ((x0 filter) = x2)))
+
+(<ppt> <==> (<fullname> <presenting> <lnp>)
+	((x0 <= (cond
+		((equal t (x3)) (list (list 'name (x1 name))))
+		(t (append (x3) (list (list 'name (x1 name)))))))))
+
+(<q> <==> (<b> <tis>)
+	(((x0 field) = exist)
+	 ((x0 filter) = x2)))
+
+(<tis> <==> (<lnp> <in> <det> <series>)
+	((x0 = x1)
+	 ((x0 series) = (x4 root))))
+
+(<q> <==> (<who> <b> <talking>)
+	(((x0 field) = (x1 root))
+	 ((x0 filter) = x3)
+	 ((x0 filter pos) = *REMOVE*)
+	 ((x0 filter root) = *REMOVE*)))
+
+(<q> <==> (<b> <person>)
+	(((x0 field) = exist)
+	 ((x0 filter) = x2)))
+
+(<lnp> <==> (<det> <talk>)
+	((x0 = x2)
+	 ((x0 pos) = *REMOVE*)
+	 ((x0 root) = *REMOVE*)))
+
+(<lnp> <==> (<fullname> <poss> <talk>)
+	((x0 = x3)
+	 ((x0 root) = *REMOVE*)
+	 ((x0 pos) = *REMOVE*)
+	 ((x0 name) = (x1 name))))
+
+(<lnp> <==> (<det> <fullname> <talk>)
+	((x0 = x3)
+	 ((x0 root) = *REMOVE*)
+	 ((x0 pos) = *REMOVE*)
+	 ((x0 name) = (x2 name))))
+
+(<talk> <==> (<series> <talk>)
+	((x0 = x2)
+	 ((x0 series) = (x1 root))))
+
+(<talk> <==> (<time> <talk>)
+	((x0 = x2)
+	 ((x0 time) = x1)))
+
+(<talk> <==> (<date> <talk>)
+	((x0 = x2)
+	 ((x0 date) = x1)))
+
+(<talk> <==> (<talk2>)
+	((x0 = x1)
+	 ((x0 pos) = n)))
+
+(<talking> <==> (<talk2>)
+	((x0 = x1)
+	 ((x0 pos) = v)))
+
+(<talk2> <==> (<talk2> <at> <time>)
+	((x0 = x1)
+	 ((x0 time) = x3)))
+
+(<talk2> <==> (<talk2> <on> <date>)
+	((x0 = x1)
+	 ((x0 date) = x3)))
+
+(<talk2> <==> (<talk2> <titled> <title>)
+	((x0 = x1)
+	 ((x0 title) = (x3 root))))
+
+(<talk2> <==> (<talk2> <in> <location>)
+	((x0 = x1)
+	 ((x0 location) = (x3 location))))
+
+(<talk2> <==> (<talk2> <givenby> <person>)
+	((x0 = x1)
+	 (x0 = x3)))
+
+(<person> <==> (<fullname>)
+	(((x0 name) = (x1 name))))
+
+(<person> <==> (<fullname> <from> <affiliation>)
+	(((x0 name) = (x1 name))
+	 ((x0 affiliation) = (x3 root))))
+
+(<person> <==> (<someone> <talking>)
+	((x0 = x2)))
+
+(<person> <==> (<someone> <from> <affiliation>)
+	(((x0 affiliation) = (x3 root))))
+
+(<fullname> <==> (<fullname> <and> <fullname>)
+	((x0 = x1)))
+
+(<fullname> <==> (<fullname> <and> <fullname>)
+	((x0 = x3)))
+
+(<fullname> <==> (<name>)
+	(((x0 name) <= (repr (x1 root)))))
+
+(<fullname> <==> (<name> <name>)
+	(((x0 name) <= (concatenate 'string
+		(repr (x1 root)) " " (repr (x2 root))))))
+	
+(<fullname> <==> (<name> <name> <name>)
+	(((x0 name) <= (concatenate 'string
+		(repr (x1 root)) " "
+		(repr (x2 root)) " "
+		(repr (x3 root))))))
+
+(<series> <==> (<series-part>)
+	(((x0 root) <= (x1 root))))
+
+(<series> <==> (<series> <series-part>)
+	(((x0 root) <= (join (list (x1 root) (x2 root))))))
+
+(<location> <==> (<det> <location>)
+	((x0 = x2)))
+
+(<location> <==> (<locationpart>)
+	(((x0 location) <= (repr (x1 root)))))
+
+(<location> <==> (<locationpart> <locationpart>)
+	(((x0 location) <= (join (list (x1 root) (x2 root))))))
+
+(<location> <==> (<locationpart> <locationpart> <locationpart>)
+	(((x0 location) <= (join (list (x1 root) (x2 root) (x3 root))))))
+
+(<location> <==> (<locationpart> <locationpart> <locationpart> <locationpart>)
+	(((x0 location) <= (join (list (x1 root) (x2 root) (x3 root) (x4 root))))))
+
+(<title> <==> (<title-part>)
+	(((x0 root) = (x1 root))))
+
+(<title> <==> (<title> <title-part>)
+	(((x0 root) <= (join (list (x1 root) (x2 root))))))
+
+(<affiliation> <==> (<affiliation-part>)
+	(((x0 root) = (x1 root))))
+
+(<affiliation> <==> (<affiliation> <affiliation-part>)
+	(((x0 root) <= (join (list (x1 root) (x2 root))))))
+
+; Non-grammar Entities
+
+(<date> <==> (<weekday> <month> <day>)
+	(((x0 weekday) = (x1 root))
+	 ((x0 month) = (x2 root))
+	 ((x0 day) = (x3 root))))
+
+(<date> <==> (<weekday> <month> <day> <year>)
+	(((x0 weekday) = (x1 root))
+	 ((x0 month) = (x2 root))
+	 ((x0 day) = (x3 root))
+	 ((x0 year) = (x4 root))))
+
+(<date> <==> (<month> <day> <year>)
+	(((x0 month) = (x1 root))
+	 ((x0 day) = (x2 root))
+	 ((x0 year) = (x3 root))))
+
+(<date> <==> (<month> <day>)
+	(((x0 month) = (x1 root))
+	 ((x0 day) = (x2 root))))
+
+(<day> <==> (<number> <th>)
+	(((x0 root) = (x1 root))))
+
+(<day> <==> (<number>)
+	(((x0 root) = (x1 root))))
+
+(<year> <==> (<number>)
+	(((x0 root) = (x1 root))))
+
+(<time> <==> (<number> <ampm>)
+	(((x0 hour) = (x1 root))
+	 ((x0 meridian) = (x2 root))))
+
+(<time> <==> (<number> <colon> <number>)
+	(((x0 hour) = (x1 root))
+	 ((x0 minute) = (x3 root))))
+
+(<time> <==> (<number> <colon> <number> <ampm>)
+	(((x0 hour) = (x1 root))
+	 ((x0 minute) = (x3 root))
+	 ((x0 meridian) = (x4 root))))
+
+; Special Lexical Entries
+
+(<title-part> <==> (%)
+	(((x0 root) <= (repr (x1 value)))))
+
+(<affiliation-part> <==> (%)
+	(((x0 root) <= (repr (x1 value)))))
+
+(<name> <==> (<name-wc>)
+	(((x0 root) = (x1 value))
+	 ((x1 name) =c t)))
+
+(<name-wc> <-- (%)
+	((x0 <= (cond
+		((numberp (x1 value)) (list (list 'name nil)))
+		(t (list (list 'name t) (list 'value (x1 value))))))))
+
+(<series-part> <-- (%)
+	(((x0 root) <= (repr (x1 value)))))
+
+;(<series-part> <==> (<series-part-wc>)
+;	(((x0 root) = (x1 value))
+;	 ((x1 series) =c t)))
+
+;(<series-part-wc> <-- (%)
+;	((x0 <= (cond
+;		((numberp (x1 value)) (list (list 'series nil)))
+;		(t (list (list 'series t) (list 'value (x1 value))))))))
+
+(<locationpart> <-- (%)
+	(((x0 root) <= (x1 value))))
+
+(<number> <==> (<number-wc>)
+	(((x0 root) = (x1 value))
+	 ((x1 num) =c t)))
+
+(<number-wc> <-- (%)
+	((x0 <= (cond
+		((numberp (x1 value)) (list (list 'num t) (list 'value (x1 value))))
+		 (t (list (list 'num nil)))))))
+
+; Lexical Mappings
+
+(<wh> <--> (WHEN) (((x0 root) = datetime)))
+(<wh> <--> (WHERE) (((x0 root) = location)))
+(<wh> <--> (WHAT TIME) (((x0 root) = time)))
+(<wh> <--> (WHAT TIMES) (((x0 root) = time)))
+(<wh> <--> (WHAT DATE) (((x0 root) = date)))
+(<wh> <--> (WHAT DATES) (((x0 root) = date)))
+(<wh> <--> (IN WHICH ROOM) (((x0 root) = location)))
+(<wh> <--> (IN WHICH ROOMS) (((x0 root) = location)))
+
+(<who> <--> (WHO) (((x0 root) = name)))
+(<what> <--> (WHAT) ())
+
+(<field> <--> (ROOM) (((x0 root) = location)))
+(<field> <--> (LOCATION) (((x0 root) = location)))
+(<field> <--> (DATE) (((x0 root) = date)))
+(<field> <--> (DATES) (((x0 root) = date)))
+(<field> <--> (TIME) (((x0 root) = time)))
+(<field> <--> (TITLE) (((x0 root) = title)))
+(<field> <--> (TOPIC) (((x0 root) = title)))
+(<field> <--> (SERIES) (((x0 root) = series)))
+(<field> <--> (AFFILIATION) (((x0 root) = affiliation)))
+(<pfield> <--> (AFFILIATION) (((x0 root) = affiliation)))
+
+(<month> <--> (JANUARY) (((x0 root) = JANUARY)))
+(<month> <--> (FEBRUARY) (((x0 root) = FEBRUARY)))
+(<month> <--> (MARCH) (((x0 root) = MARCH)))
+(<month> <--> (APRIL) (((x0 root) = APRIL)))
+(<month> <--> (MAY) (((x0 root) = MAY)))
+(<month> <--> (JUNE) (((x0 root) = JUNE)))
+(<month> <--> (JULY) (((x0 root) = JULY)))
+(<month> <--> (AUGUST) (((x0 root) = AUGUST)))
+(<month> <--> (SEPTEMBER) (((x0 root) = SEPTEMBER)))
+(<month> <--> (OCTOBER) (((x0 root) = OCTOBER)))
+(<month> <--> (NOVEMBER) (((x0 root) = NOVEMBER)))
+(<month> <--> (DECEMBER) (((x0 root) = DECEMBER)))
+
+(<weekday> <--> (SUNDAY) (((x0 root) = SUNDAY)))
+(<weekday> <--> (MONDAY) (((x0 root) = MONDAY)))
+(<weekday> <--> (TUESDAY) (((x0 root) = TUESDAY)))
+(<weekday> <--> (WEDNESDAY) (((x0 root) = WEDNESDAY)))
+(<weekday> <--> (THURSDAY) (((x0 root) = THURSDAY)))
+(<weekday> <--> (FRIDAY) (((x0 root) = FRIDAY)))
+(<weekday> <--> (SATURDAY) (((x0 root) = SATURDAY)))
+
+(<ampm> <--> (AM) (((x0 root) = AM)))
+(<ampm> <--> (PM) (((x0 root) = PM)))
+
+(<talk2> <--> (TALK) (((x0 root) = TALK)((x0 pos) = n)))
+(<talk2> <--> (TALKS) (((x0 root) = TALKS)((x0 pos) = n)))
+(<talk2> <--> (LECTURE) (((x0 root) = LECTURE)((x0 pos) = n)))
+(<talk2> <--> (SEMINAR) (((x0 root) = SEMINAR)((x0 pos) = n)))
+(<talk2> <--> (PRESENTATION) (((x0 root) = PRESENTATION)((x0 pos) = n)))
+(<talk2> <--> (WORKSHOP) (((x0 root) = WORKSHOP)((x0 pos) = n)))
+(<talk2> <--> (WORKSHOPS) (((x0 root) = WORKSHOPS)((x0 pos) = n)))
+(<talk2> <--> (COLLOQUIUM) (((x0 root) = COLLOQUIUM)((x0 pos) = n)))
+(<talk2> <--> (LUNCH) (((x0 root) = LUNCH)((x0 pos) = n)))
+
+(<talk2> <--> (TALKING) (((x0 root) = TALKING)((x0 pos) = v)))
+(<talk2> <--> (PRESENTING) (((x0 root) = PRESENTING)((x0 pos) = v)))
+(<talk2> <--> (SPEAKING) (((x0 root) = SPEAKING)((x0 pos) = v)))
+
+(<presenting> <--> (PRESENTING) (((x0 root) = PRESENTING)))
+(<presenting> <--> (GIVING) (((x0 root) = GIVING)))
+
+(<speakers> <--> (SPEAKER) (((x0 root) = SPEAKER)))
+(<speakers> <--> (SPEAKERS) (((x0 root) = SPEAKERS)))
+(<speakers> <--> (PRESENTERS) (((x0 root) = PRESENTERS)))
+(<someone> <--> (SOMEONE) (((x0 root) = SOMEONE)))
+(<someone> <--> (A SPEAKER) (((x0 root) = SPEAKER)))
+(<someone> <--> (THE SPEAKER) (((x0 root) = SPEAKER)))
+
+(<qexist> <--> (ARE THERE) ())
+(<qexist> <--> (IS THERE) ())
+(<det> <--> (THE) ())
+(<det> <--> (A) ())
+(<det> <--> (AN) ())
+(<det> <--> (ANY) ())
+(<b> <--> (IS) ())
+(<b> <--> (ARE) ())
+(<at> <--> (AT) ())
+(<by> <--> (BY) ())
+(<givenby> <--> (BY) ())
+(<givenby> <--> (PRESENTED BY) ())
+(<givenby> <--> (GIVEN BY) ())
+(<givenby> <--> (BEING GIVEN BY) ())
+(<in> <--> (IN) ())
+(<in> <--> (BEING GIVEN AT) ())
+(<titled> <--> (ON) ())
+(<titled> <--> (TITLED) ())
+(<on> <--> (ON) ())
+(<of> <--> (OF) ())
+(<for> <--> (FOR) ())
+(<from> <--> (FROM) ())
+(<from> <--> (AFFILIATED WITH) ())
+(<from> <--> (WITH) ())
+(<and> <--> (AND) ())
+(<th> <--> (TH) ())
+(<poss> <--> (S) ())
+(<colon> <--> (COLON) ())
+(<qm> <--> (?) ())
+
